@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Día Mamá</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>¡Feliz Días de las Madres!</h1>
+            <div class="heart" id="happyHeart"></div>
+            <div class="message">
+                <p>Para las mejores mamás del mundo...</p>
+                <p class="special-text">Gracias por sus amores infinitos, por sus cuidados y por estar siempre a lado de todos nosotros.</p>
+                <p>Con todo amor el 5to B❤️</p>
+            </div>
+            <button id="showMessage">Click aquí</button>
+            <div style="text-align: center; margin-top: 20px;">
+                <button id="musicControl">▶️ Reproducir música</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Limpiar corazones existentes al refrescar
+        const existingHearts = document.querySelectorAll('.heart-balloon');
+        existingHearts.forEach(heart => heart.remove());
+
+        // Función mejorada para crear corazones desde cualquier posición
+        function createHeart(initialPosition = 0, fromTop = false) {
+            const heart = document.createElement('div');
+            heart.className = 'heart-balloon';
+            heart.innerHTML = '❤';
+            
+            const randomX = Math.random() * (window.innerWidth - 50);
+            const size = 40 + Math.random() * 40; // Aumenté el tamaño base y rango
+            
+            heart.style.left = randomX + 'px';
+            heart.style.fontSize = size + 'px'; // Tamaño más grande
+            heart.style.transition = 'all 4s linear';
+            heart.style.opacity = '0.8';
+            heart.style.filter = 'drop-shadow(0 0 5px rgba(255,75,110,0.7))';
+            
+            if(fromTop) {
+                heart.style.top = '0';
+                heart.style.bottom = 'auto';
+            } else {
+                heart.style.bottom = initialPosition + 'px';
+            }
+            
+            document.body.appendChild(heart);
+            
+            // Animación suave
+            setTimeout(() => {
+                heart.style.opacity = '1';
+                if(fromTop) {
+                    heart.style.top = '100vh';
+                } else {
+                    heart.style.bottom = '100vh';
+                }
+            }, 50);
+            
+            // Eliminar después de animación
+            setTimeout(() => {
+                heart.remove();
+            }, 4000);
+        }
+
+        // Modificar la creación de corazones para alternar entre arriba y abajo
+        function startHeartCreation() {
+            createInitialHearts();
+            let fromTop = false;
+            setInterval(() => {
+                createHeart(window.innerHeight, fromTop);
+                fromTop = !fromTop; // Alternar posición
+            }, 800);
+        }
+
+        // Crear corazones iniciales
+        function createInitialHearts() {
+            for(let i = 0; i < 15; i++) {
+                createHeart(window.innerHeight + (i * 50));
+            }
+        }
+
+        // Crear corazones continuamente
+        function startHeartCreation() {
+            createInitialHearts();
+            setInterval(() => {
+                createHeart(window.innerHeight);
+            }, 800);
+        }
+
+        startHeartCreation();
+    });
+    </script>
+
+    <script>
+    // Agregar el evento de clic al corazón
+    document.getElementById('happyHeart').addEventListener('click', function() {
+        this.classList.add('happy');
+        setTimeout(() => {
+            this.classList.remove('happy');
+        }, 1000);
+    });
+    
+    // Agregar también el evento touch para dispositivos móviles
+    document.getElementById('happyHeart').addEventListener('touchstart', function(e) {
+        e.preventDefault(); // Prevenir el comportamiento por defecto
+        this.classList.add('happy');
+        setTimeout(() => {
+            this.classList.remove('happy');
+        }, 1000);
+    });
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let canCreateRoses = true;
+
+        function handleRoseClick(rose) {
+            rose.classList.add('explode');
+            setTimeout(() => {
+                rose.classList.remove('explode');
+            }, 5000);
+        }
+    
+        function createRoses() {
+            if (!canCreateRoses) return;
+            
+            canCreateRoses = false;
+            
+            // Crear rosas izquierda y derecha (abajo)
+            const roseLeftBottom = document.createElement('div');
+            roseLeftBottom.className = 'rose-balloon-left';
+            roseLeftBottom.innerHTML = '🌹';
+            roseLeftBottom.style.fontSize = '50px';
+            roseLeftBottom.style.bottom = '0';
+            document.body.appendChild(roseLeftBottom);
+            
+            const roseRightBottom = document.createElement('div');
+            roseRightBottom.className = 'rose-balloon-right';
+            roseRightBottom.innerHTML = '🌹';
+            roseRightBottom.style.fontSize = '50px';
+            roseRightBottom.style.bottom = '0';
+            document.body.appendChild(roseRightBottom);
+
+            // Crear rosas izquierda y derecha (arriba)
+            const roseLeftTop = document.createElement('div');
+            roseLeftTop.className = 'rose-balloon-left';
+            roseLeftTop.innerHTML = '🌹';
+            roseLeftTop.style.fontSize = '50px';
+            roseLeftTop.style.top = '0';
+            document.body.appendChild(roseLeftTop);
+            
+            const roseRightTop = document.createElement('div');
+            roseRightTop.className = 'rose-balloon-right';
+            roseRightTop.innerHTML = '🌹';
+            roseRightTop.style.fontSize = '50px';
+            roseRightTop.style.top = '0';
+            document.body.appendChild(roseRightTop);
+
+            // Animación y eliminación
+            [roseLeftBottom, roseRightBottom, roseLeftTop, roseRightTop].forEach(rose => {
+                rose.addEventListener('click', () => handleRoseClick(rose));
+                setTimeout(() => rose.remove(), 8000);
+            });
+
+            setTimeout(() => canCreateRoses = true, 8100);
+        }
+
+        // Crear primer par de rosas inmediatamente
+        createRoses();
+        
+        // Crear rosas adicionales con un pequeño retraso para mejor efecto visual
+        setTimeout(() => createRoses(), 2000);
+        
+        // Continuar creando rosas periódicamente
+        setInterval(createRoses, 8100);
+    });
+    </script>
+    <script src="script.js"></script>
+    
+    <audio id="backgroundMusic" loop>
+        <source src="Día de la madre｜ Mamita querida.mp3" type="audio/mpeg">
+    </audio>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const music = document.getElementById('backgroundMusic');
+            const musicBtn = document.getElementById('musicControl');
+            music.volume = 0.5;
+            
+            // Controlador del botón de música
+            musicBtn.addEventListener('click', function() {
+                if (music.paused) {
+                    music.play();
+                    musicBtn.textContent = '⏸️ Pausar música';
+                } else {
+                    music.pause();
+                    musicBtn.textContent = '▶️ Reproducir música';
+                }
+            });
+            
+            // Intentar reproducir automáticamente sin alerta
+            music.play().catch(() => {
+                // Silenciar el error si el autoplay falla
+            });
+        });
+    </script>
+</body>
+</html>
